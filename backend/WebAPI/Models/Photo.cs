@@ -1,0 +1,15 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebAPI.Models
+{
+    [Table("Photos")]
+    public class Photo : BaseEntity
+    {
+        [Required]
+        public string ImageUrl { get; set; } = string.Empty;
+        public bool IsPrimary { get; set; }
+        public int PropertyId { get; set; }
+        public Property Property { get; set; }
+    }
+}
