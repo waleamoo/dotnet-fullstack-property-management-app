@@ -44,7 +44,7 @@ namespace WebAPI.Controllers
             return Ok(loginRes);  
         }
 
-        internal string CreateJWT(User user)
+        private string CreateJWT(User user)
         {
             // authentication key 
             // symmetric encryption - one key can be used for both encrypting and decrypting the token 
@@ -57,12 +57,13 @@ namespace WebAPI.Controllers
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
+
             // define the secret key and security algorithm
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(30),
+                Expires = DateTime.UtcNow.AddMinutes(10),
                 SigningCredentials = signingCredentials
             };
             // token handler responsible for creating JWT 

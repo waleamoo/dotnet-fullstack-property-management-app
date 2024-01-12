@@ -9,6 +9,7 @@ using WebAPI.Extensions;
 using WebAPI.Helper;
 using WebAPI.Interfaces;
 using WebAPI.Middlewares;
+using WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -23,12 +24,12 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
-        Description = "Standard Authorization header using the Bearer Scheme (\"Bearer {token}\")",
+        Description = "Standard Authorization header using the Bearer Scheme (\"bearer {token}\")",
         In = ParameterLocation.Header,
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-    options.OperationFilter<SecurityRequirementsOperationFilter>(); // Install extension swashbuckle.AspNetCore.Filters by Matt Frear
+    options.OperationFilter<SecurityRequirementsOperationFilter>(); 
 });
 // 1. Add the Db context
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
@@ -36,6 +37,7 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(build
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 // 4. Add the Repository interface and implementation 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 // 7. Add JWT bearer (configure authentication service)
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
 {
@@ -61,11 +63,11 @@ else
 }
 // 7. use custom-user-made middleware to handle unforseen errors 
 app.UseMiddleware<ExceptionMiddleware>();
+// 8. authentication comes before authorization
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 // 3. Add the cors middleware 
 app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-// 8. Add authorization
-app.UseAuthentication();
 app.Run();
  

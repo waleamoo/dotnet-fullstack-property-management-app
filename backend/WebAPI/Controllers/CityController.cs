@@ -8,7 +8,7 @@ using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CityController : BaseController
     {
         private readonly IUnitOfWork uow;
@@ -21,7 +21,8 @@ namespace WebAPI.Controllers
         }
         // GET: /api/cities
         [HttpGet("cities")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> GetCities()
         {
             var cities = await uow.CityRepository.GetCitiesAsync();

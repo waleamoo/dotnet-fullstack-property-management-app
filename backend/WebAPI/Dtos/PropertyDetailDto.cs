@@ -1,4 +1,5 @@
-﻿using WebAPI.Models;
+﻿using System.Security.Principal;
+using WebAPI.Models;
 
 namespace WebAPI.Dtos
 {
@@ -16,5 +17,6 @@ namespace WebAPI.Dtos
         public int Maintenance { get; set; }
         public int Age { get; set; }
         public string Description { get; set; } = string.Empty;
+        public ICollection<PhotoDto> Photos { get; set; }
     }
 }
