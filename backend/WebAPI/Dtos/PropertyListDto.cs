@@ -17,5 +17,6 @@ namespace WebAPI.Dtos
         public string Country { get; set; } = string.Empty;
         public bool ReadyToMove { get; set; }
         public DateTime EstPossessionOn { get; set; }
+        public string Photo { get; set; } = string.Empty;
     }
 }
